@@ -9,7 +9,7 @@
     "copy": "cpy ./dist/** ../src/main/resources --parents",
     "deleteAndCopy": "npm run delete && npm run copy",
     "rename": "rename ../src/main/resources/dist static",
-    "buildAll": "npm run build && npm run deleteAndCopy"
+    "buildAll": "npm run build && npm run deleteAndCopy && npm run rename"
   },
   "dependencies": {
     "vue": "^2.5.17",
