@@ -48,6 +48,6 @@ task npmBuild(type: Exec, dependsOn: npmInstall) {
     commandLine 'npm', 'run', 'buildAll'
 }
 
-jar {
+processResources {
     dependsOn npmBuild
 }

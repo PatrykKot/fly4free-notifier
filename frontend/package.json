@@ -8,6 +8,7 @@
     "delete": "rimraf ../src/main/resources/dist",
     "copy": "cpy ./dist/** ../src/main/resources --parents",
     "deleteAndCopy": "npm run delete && npm run copy",
+    "rename": "rename ../src/main/resources/dist static",
     "buildAll": "npm run build && npm run deleteAndCopy"
   },
   "dependencies": {
@@ -20,6 +21,7 @@
     "@vue/cli-service": "^3.0.3",
     "cpy-cli": "^2.0.0",
     "node-sass": "^4.9.0",
+    "rename-cli": "^5.1.2",
     "rimraf": "^2.6.2",
     "sass-loader": "^7.0.1",
     "vue-template-compiler": "^2.5.17"
