@@ -6,9 +6,11 @@ buildscript {
         mavenCentral()
         maven { url "https://repo.spring.io/snapshot" }
         maven { url "https://repo.spring.io/milestone" }
+        maven { url "https://plugins.gradle.org/m2/" }
     }
     dependencies {
         classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+        classpath "com.moowork.gradle:gradle-node-plugin:1.2.0"
     }
 }
 
@@ -16,6 +18,7 @@ apply plugin: 'java'
 apply plugin: 'eclipse'
 apply plugin: 'org.springframework.boot'
 apply plugin: 'io.spring.dependency-management'
+apply plugin: 'com.moowork.node'
 
 group = 'com.kotlarz'
 version = '0.0.1-SNAPSHOT'
@@ -38,16 +41,24 @@ dependencies {
     testCompile('org.springframework.security:spring-security-test')
 }
 
-task npmInstall(type: Exec) {
-    workingDir 'frontend'
-    commandLine 'npm', 'install'
+node {
+    version = '8.11.3'
+    npmVersion = '6.2.0'
+    download = true
+    workDir = file("${project.projectDir}/frontend/node")
+    npmWorkDir = file("${project.projectDir}/frontend/npm")
 }
 
-task npmBuild(type: Exec, dependsOn: npmInstall) {
-    workingDir 'frontend'
-    commandLine 'npm', 'run', 'buildAll'
+task frontendInstall(type: NpmTask) {
+    workingDir = file("${project.projectDir}/frontend")
+    args = ['install']
+}
+
+task frontendBuild(type: NpmTask, dependsOn: frontendInstall) {
+    workingDir = file("${project.projectDir}/frontend")
+    args = ['run', 'buildAll']
 }
 
 processResources {
-    dependsOn npmBuild
+    dependsOn frontendBuild
 }

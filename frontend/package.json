@@ -3,18 +3,19 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "serve": "vue-cli-service serve",
+    "serve": "vue-cli-service serve --port 8081 --open",
+    "deleteJavaStatic": "rimraf ../src/main/resources/static",
     "build": "vue-cli-service build",
-    "delete": "rimraf ../src/main/resources/dist",
-    "copy": "cpy ./dist/** ../src/main/resources --parents",
-    "deleteAndCopy": "npm run delete && npm run copy",
-    "rename": "rename ../src/main/resources/dist static",
-    "buildAll": "npm run build && npm run deleteAndCopy && npm run rename"
+    "renameDistToStatic": "rename dist static",
+    "copyStaticToJava": "cpy ./static/** ../src/main/resources --parents",
+    "renameStaticToDist": "rename static dist",
+    "buildAll": "npm run deleteJavaStatic && npm run build && npm run renameDistToStatic && npm run copyStaticToJava && npm run renameStaticToDist"
   },
   "dependencies": {
+    "axios": "^0.18.0",
+    "material-design-icons-iconfont": "^3.0.3",
     "vue": "^2.5.17",
-    "vue-router": "^3.0.1",
-    "vuex": "^3.0.1"
+    "vuetify": "^1.2.4"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^3.0.3",
@@ -24,6 +25,8 @@
     "rename-cli": "^5.1.2",
     "rimraf": "^2.6.2",
     "sass-loader": "^7.0.1",
+    "stylus": "^0.54.5",
+    "stylus-loader": "^3.0.2",
     "vue-template-compiler": "^2.5.17"
   }
 }
