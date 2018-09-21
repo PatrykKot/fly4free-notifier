@@ -7,16 +7,16 @@
                         dark
                         slider-color="yellow">
                     <v-tab ripple>
-                        Powiadomienia
-                    </v-tab>
-                    <v-tab-item>
-                        <notified-users-view/>
-                    </v-tab-item>
-                    <v-tab ripple>
                         Zdarzenia
                     </v-tab>
                     <v-tab-item>
                         <site-events-view/>
+                    </v-tab-item>
+                    <v-tab ripple>
+                        Powiadomienia
+                    </v-tab>
+                    <v-tab-item>
+                        <notified-users-view/>
                     </v-tab-item>
                 </v-tabs>
             </v-container>

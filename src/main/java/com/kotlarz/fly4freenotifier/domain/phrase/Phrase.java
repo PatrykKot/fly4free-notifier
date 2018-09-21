@@ -1,10 +1,12 @@
 package com.kotlarz.fly4freenotifier.domain.phrase;
 
+import com.kotlarz.fly4freenotifier.domain.event.SiteEvent;
 import com.kotlarz.fly4freenotifier.domain.notified.NotifiedUser;
 import com.kotlarz.fly4freenotifier.domain.notified.SiteType;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Getter
@@ -27,4 +29,7 @@ public class Phrase {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "ownerid")
     private NotifiedUser owner;
+
+    @ManyToMany(mappedBy = "phrases", fetch = FetchType.LAZY)
+    private List<SiteEvent> siteEvents;
 }
