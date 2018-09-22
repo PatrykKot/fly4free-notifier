@@ -5,11 +5,14 @@ import com.kotlarz.fly4freenotifier.service.crawler.SiteCrawler;
 import com.kotlarz.fly4freenotifier.service.util.CrawlingResult;
 import lombok.SneakyThrows;
 import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
 import org.springframework.stereotype.Service;
 
+import java.io.PrintWriter;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLDecoder;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -22,8 +25,13 @@ public class Fly4FreeFbCrawler implements SiteCrawler {
     @Override
     @SneakyThrows
     public List<CrawlingResult> getLatestEventContents() {
-        return Jsoup.connect(FLY4FREE_FACEBOOK_URL)
-                .get()
+        Document document = Jsoup.connect(FLY4FREE_FACEBOOK_URL).get();
+        String documentContent = document.toString();
+        try (PrintWriter out = new PrintWriter("page/page_" + new Date().getTime() + ".html")) {
+            out.println(documentContent);
+        }
+
+        return document
                 .getElementsByClass("userContent")
                 .stream()
                 .map(element -> {
