@@ -1,5 +1,5 @@
 package com.kotlarz.fly4freenotifier.domain.notified;
 
 public enum SiteType {
-    FLY4FREE
+    FLY4FREE, WAKACYJNI_PIRACI
 }

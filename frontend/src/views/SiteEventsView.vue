@@ -4,6 +4,9 @@
             <v-data-table
                     :headers="headers"
                     :items="events"
+                    :total-items="total"
+                    :loading="loading"
+                    :pagination.sync="pagination"
                     disable-initial-sort>
                 <template slot="items" slot-scope="props">
                     <td>
@@ -35,27 +38,40 @@
     export default {
         name: "SiteEventsView",
         components: {SiteByPhrasesElement},
+
         data: () => ({
             events: [],
-
             headers: [
-                {text: 'Treść', value: 'normalizedContent'},
-                {text: 'Pasujących fraz', value: 'siteByPhrases.length'},
-                {text: 'Strona', value: 'siteType'},
+                {text: 'Treść', value: 'normalizedContent', sortable: false},
+                {text: 'Pasujących fraz', value: 'siteByPhrases.length', sortable: false},
+                {text: 'Strona', value: 'siteType', sortable: false},
                 {text: 'Data', value: 'date'}
-            ]
+            ],
+            total: 0,
+            loading: true,
+            pagination: {}
         }),
 
-        created() {
-            this.reload()
+        watch: {
+            pagination: {
+                handler() {
+                    this.reload()
+                },
+                deep: true
+            }
         },
 
         methods: {
             reload() {
-                SiteEventService.getAll()
+                this.loading = true
+                const {sortBy, descending, page, rowsPerPage} = this.pagination
+
+                SiteEventService.getEvents(sortBy, descending, page, rowsPerPage)
                     .then(result => {
                         clearArray(this.events)
-                        addAll(this.events, result)
+                        addAll(this.events, result.data)
+                        this.total = result.count
+                        this.loading = false
                     })
             },
 

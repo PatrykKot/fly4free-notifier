@@ -36,7 +36,6 @@ public class SiteEventScheduler {
     private void crawlAll() {
         log.info("Running {} crawlers", crawlers.size());
         transactionalCrawlAll();
-
         log.info("Crawlers finished");
     }
 
@@ -44,26 +43,41 @@ public class SiteEventScheduler {
     protected void transactionalCrawlAll() {
         List<SiteEvent> newEvents = new LinkedList<>();
 
-        crawlers.forEach(crawler -> {
-            List<CrawlingResult> latestResults = crawler.getLatestEventContents();
+        crawlers.parallelStream().forEach(crawler -> {
             SiteType siteType = crawler.supports();
+            String crawlerName = crawler.getClass().getSimpleName();
+            log.info("Running crawler " + crawlerName);
 
-            latestResults.forEach(result -> {
-                String content = result.getContent();
-                String hash = calculateHash(content, siteType);
-
-                if (siteEventRepository.findByHash(hash).isEmpty()) {
-                    log.debug("Found new event at site " + siteType.name());
-                    newEvents.add(SiteEvent.builder()
-                            .hash(hash)
-                            .date(new Date())
-                            .siteType(siteType)
-                            .content(content)
-                            .normalizedContent(normalizeContent(content))
-                            .link(result.getLink())
-                            .build());
+            try {
+                List<CrawlingResult> latestResults = crawler.getLatestEventContents();
+                if (latestResults.isEmpty()) {
+                    log.error("Crawler " + crawlerName + " didn't find any data");
+                } else {
+                    log.info("Crawler " + crawlerName + " found " + latestResults.size() + " events");
                 }
-            });
+
+                latestResults.forEach(result -> {
+                    String content = result.getContent();
+                    String hash = calculateHash(content, siteType);
+
+                    if (siteEventRepository.findByHash(hash).isEmpty()) {
+                        log.debug("Found new event at site " + siteType.name());
+                        newEvents.add(SiteEvent.builder()
+                                .hash(hash)
+                                .date(new Date())
+                                .siteType(siteType)
+                                .content(content)
+                                .normalizedContent(normalizeContent(content))
+                                .link(result.getLink())
+                                .build());
+                    }
+                });
+
+                log.info("Finished for crawler " + crawlerName);
+            } catch (Exception ex) {
+                log.error("Error while running crawler " + crawlerName);
+                log.error(ex.getMessage(), ex);
+            }
         });
 
         log.info("Found {} new events", newEvents.size());

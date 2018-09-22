@@ -9,6 +9,8 @@ public class SiteTypeTranslationResolver {
         switch (type) {
             case FLY4FREE:
                 return "Fly4Free";
+            case WAKACYJNI_PIRACI:
+                return "Wakacyjni piraci";
             default:
                 return type.name();
         }

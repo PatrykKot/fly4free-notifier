@@ -7,6 +7,8 @@ import com.kotlarz.fly4freenotifier.web.dto.site.SiteEventDto;
 import com.kotlarz.fly4freenotifier.web.dto.site.SiteTypeDto;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -24,13 +26,12 @@ public class SiteEventService {
     private SiteEventRepository siteEventRepository;
 
     @Transactional
-    public List<SiteEvent> getAll() {
-        return toList(siteEventRepository.findAll());
-    }
+    public List<SiteEventDto> getDtos(String sortBy, Boolean descending, Long page, Long rowsPerPage) {
+        Sort.Direction direction = descending ? Sort.Direction.DESC : Sort.Direction.ASC;
+        sortBy = sortBy == null ? "date" : sortBy;
+        PageRequest request = PageRequest.of(page.intValue() - 1, rowsPerPage.intValue(), direction, sortBy);
 
-    @Transactional
-    public List<SiteEventDto> getAllDto() {
-        return getAll().stream()
+        return siteEventRepository.findAll(request).stream()
                 .map(this::toDto)
                 .collect(Collectors.toList());
     }
@@ -68,5 +69,10 @@ public class SiteEventService {
         List<T> result = new LinkedList<>();
         iterable.forEach(item -> result.add(item));
         return result;
+    }
+
+    @Transactional
+    public Long countAll() {
+        return siteEventRepository.count();
     }
 }
