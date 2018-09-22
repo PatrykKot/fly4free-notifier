@@ -1,4 +1,4 @@
-package com.kotlarz.fly4freenotifier.service;
+package com.kotlarz.fly4freenotifier.service.crawler;
 
 import com.kotlarz.fly4freenotifier.domain.notified.SiteType;
 import com.kotlarz.fly4freenotifier.service.util.CrawlingResult;

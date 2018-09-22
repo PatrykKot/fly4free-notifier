@@ -1,22 +1,30 @@
 <template>
-    <v-card>
-        <v-card-text>
-            <v-form>
-                <v-text-field v-model="email"
-                              label="Email"/>
-            </v-form>
+    <v-expansion-panel>
+        <v-expansion-panel-content>
+            <div slot="header">
+                <span v-if="!!email">{{email}}</span>
+                <span v-else><i>Nowy adres email</i></span>
+            </div>
+            <v-card>
+                <v-card-text>
+                    <v-form>
+                        <v-text-field v-model="email"
+                                      label="Email"/>
+                    </v-form>
 
-            <phrase-component :key="index"
-                              v-for="(phrase, index) in phrases"
-                              :phrase="phrase"
-                              :site-types="siteTypes"
-                              @change="phraseChanged(index, $event)"
-                              @delete="deletePhrase(index)"/>
+                    <phrase-component :key="index"
+                                      v-for="(phrase, index) in phrases"
+                                      :phrase="phrase"
+                                      :site-types="siteTypes"
+                                      @change="phraseChanged(index, $event)"
+                                      @delete="deletePhrase(index)"/>
 
-            <v-btn @click="addPhrase">Nowa fraza</v-btn>
-            <v-btn @click="$emit('delete')">Usuń adres</v-btn>
-        </v-card-text>
-    </v-card>
+                    <v-btn @click="addPhrase">Nowa fraza</v-btn>
+                    <v-btn @click="$emit('delete')">Usuń adres</v-btn>
+                </v-card-text>
+            </v-card>
+        </v-expansion-panel-content>
+    </v-expansion-panel>
 </template>
 
 <script>

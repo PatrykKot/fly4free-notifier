@@ -1,4 +1,4 @@
-package com.kotlarz.fly4freenotifier.service.fly4free;
+package com.kotlarz.fly4freenotifier.service.crawler.fly4free;
 
 import com.kotlarz.fly4freenotifier.service.util.CrawlingResult;
 import org.junit.Assert;

@@ -1,7 +1,7 @@
-package com.kotlarz.fly4freenotifier.service.fly4free;
+package com.kotlarz.fly4freenotifier.service.crawler.fly4free;
 
 import com.kotlarz.fly4freenotifier.domain.notified.SiteType;
-import com.kotlarz.fly4freenotifier.service.SiteCrawler;
+import com.kotlarz.fly4freenotifier.service.crawler.SiteCrawler;
 import com.kotlarz.fly4freenotifier.service.util.CrawlingResult;
 import lombok.SneakyThrows;
 import org.jsoup.Jsoup;

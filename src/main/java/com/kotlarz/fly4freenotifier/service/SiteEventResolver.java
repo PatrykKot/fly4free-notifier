@@ -6,6 +6,7 @@ import com.kotlarz.fly4freenotifier.domain.phrase.Phrase;
 import com.kotlarz.fly4freenotifier.domain.phrase.SiteByPhrase;
 import com.kotlarz.fly4freenotifier.repository.PhraseRepository;
 import com.kotlarz.fly4freenotifier.repository.SiteEventRepository;
+import com.kotlarz.fly4freenotifier.service.notifier.EmailNotifier;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

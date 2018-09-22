@@ -3,6 +3,7 @@ package com.kotlarz.fly4freenotifier.service;
 import com.kotlarz.fly4freenotifier.domain.event.SiteEvent;
 import com.kotlarz.fly4freenotifier.domain.notified.SiteType;
 import com.kotlarz.fly4freenotifier.repository.SiteEventRepository;
+import com.kotlarz.fly4freenotifier.service.crawler.SiteCrawler;
 import com.kotlarz.fly4freenotifier.service.util.CrawlingResult;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
