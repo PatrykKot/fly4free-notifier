@@ -104,6 +104,7 @@
                         this.snackBarSuccess = true
 
                         this.reload()
+                        this.$emit('changed')
                     })
                     .catch(() => {
                         this.snackBarText = 'Wystąpił błąd poczas zapisywania'

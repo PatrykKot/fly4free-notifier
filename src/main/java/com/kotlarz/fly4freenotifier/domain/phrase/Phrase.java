@@ -1,6 +1,5 @@
 package com.kotlarz.fly4freenotifier.domain.phrase;
 
-import com.kotlarz.fly4freenotifier.domain.event.SiteEvent;
 import com.kotlarz.fly4freenotifier.domain.notified.NotifiedUser;
 import com.kotlarz.fly4freenotifier.domain.notified.SiteType;
 import lombok.*;
@@ -30,6 +29,6 @@ public class Phrase {
     @JoinColumn(name = "ownerid")
     private NotifiedUser owner;
 
-    @ManyToMany(mappedBy = "phrases", fetch = FetchType.LAZY)
-    private List<SiteEvent> siteEvents;
+    @OneToMany(mappedBy = "phrase", fetch = FetchType.EAGER, orphanRemoval = true, cascade = CascadeType.ALL)
+    private List<SiteByPhrase> siteByPhrases;
 }

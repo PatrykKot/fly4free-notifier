@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "serve": "vue-cli-service serve --port 8081 --open",
+    "serve": "vue-cli-service serve --port 8080 --open",
     "deleteJavaStatic": "rimraf ../src/main/resources/static",
     "build": "vue-cli-service build",
     "renameDistToStatic": "rename dist static",

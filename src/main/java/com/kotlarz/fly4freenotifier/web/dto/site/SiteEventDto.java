@@ -4,6 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 
+import java.util.List;
+
 @Data
 @Builder
 @AllArgsConstructor
@@ -14,5 +16,13 @@ public class SiteEventDto {
 
     private String content;
 
+    private String normalizedContent;
+
+    private String link;
+
+    private String innerTitle;
+
     private Long date;
+
+    private List<SiteByPhraseDto> siteByPhrases;
 }

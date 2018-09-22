@@ -3,6 +3,7 @@ package com.kotlarz.fly4freenotifier.service;
 import com.kotlarz.fly4freenotifier.domain.event.SiteEvent;
 import com.kotlarz.fly4freenotifier.domain.notified.SiteType;
 import com.kotlarz.fly4freenotifier.domain.phrase.Phrase;
+import com.kotlarz.fly4freenotifier.domain.phrase.SiteByPhrase;
 import com.kotlarz.fly4freenotifier.repository.PhraseRepository;
 import com.kotlarz.fly4freenotifier.repository.SiteEventRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -34,20 +35,35 @@ public class SiteEventResolver {
 
         events.forEach(event -> {
             String content = event.getContent().toLowerCase();
+            String innerTitle = event.getInnerTitle().toLowerCase();
             SiteType siteType = event.getSiteType();
 
             if (groupedPhrases.containsKey(siteType)) {
                 List<Phrase> matchingPhrases = groupedPhrases.get(siteType).stream()
-                        .filter(phrase -> content.contains(phrase.getText().toLowerCase().trim()))
+                        .filter(phrase -> {
+                            String trimmedPhrase = phrase.getText().toLowerCase().trim();
+                            return content.contains(trimmedPhrase) || innerTitle.contains(trimmedPhrase);
+                        })
                         .collect(Collectors.toList());
-                log.info("{} phrases matching to event from site " + siteType);
-                log.info("Saving event from site " + siteType);
-                matchingPhrases.forEach(phrase -> phrase.getSiteEvents().add(event));
-                event.setPhrases(matchingPhrases);
-                siteEventRepository.save(event);
+                log.info("{} phrases matching to event from site " + siteType, matchingPhrases.size());
+
+                List<SiteByPhrase> siteByPhrases = matchingPhrases.stream()
+                        .map(phrase -> {
+                            SiteByPhrase siteByPhrase = SiteByPhrase.builder()
+                                    .phrase(phrase)
+                                    .siteEvent(event)
+                                    .build();
+                            phrase.getSiteByPhrases().add(siteByPhrase);
+                            return siteByPhrase;
+                        })
+                        .collect(Collectors.toList());
+                event.setSiteByPhrases(siteByPhrases);
 
                 log.info("Sending email to owners of {} phrases", matchingPhrases.size());
-                matchingPhrases.forEach(phrase -> emailNotifier.notify(phrase, event));
+                siteByPhrases.forEach(siteByPhrase -> emailNotifier.notify(siteByPhrase));
+
+                log.info("Saving event from site " + siteType);
+                siteEventRepository.save(event);
             } else {
                 log.info("There are no phrases for site " + siteType);
                 log.info("Saving event from site " + siteType);

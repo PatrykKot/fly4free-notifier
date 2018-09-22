@@ -3,6 +3,7 @@ package com.kotlarz.fly4freenotifier.service;
 import com.kotlarz.fly4freenotifier.domain.event.SiteEvent;
 import com.kotlarz.fly4freenotifier.domain.notified.SiteType;
 import com.kotlarz.fly4freenotifier.repository.SiteEventRepository;
+import com.kotlarz.fly4freenotifier.service.util.CrawlingResult;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,8 @@ import java.util.List;
 @Slf4j
 @Service
 public class SiteEventScheduler {
+    private static final Integer MAX_CONTENT_LENGTH = 150;
+
     @Autowired
     private List<SiteCrawler> crawlers;
 
@@ -41,11 +44,13 @@ public class SiteEventScheduler {
         List<SiteEvent> newEvents = new LinkedList<>();
 
         crawlers.forEach(crawler -> {
-            List<String> latestContents = crawler.getLatestEventContents();
+            List<CrawlingResult> latestResults = crawler.getLatestEventContents();
             SiteType siteType = crawler.supports();
 
-            latestContents.forEach(content -> {
+            latestResults.forEach(result -> {
+                String content = result.getContent();
                 String hash = calculateHash(content, siteType);
+
                 if (siteEventRepository.findByHash(hash).isEmpty()) {
                     log.debug("Found new event at site " + siteType.name());
                     newEvents.add(SiteEvent.builder()
@@ -53,6 +58,9 @@ public class SiteEventScheduler {
                             .date(new Date())
                             .siteType(SiteType.FLY4FREE_FACEBOOK)
                             .content(content)
+                            .normalizedContent(normalizeContent(content))
+                            .innerTitle(result.getInnerTitle())
+                            .link(result.getLink())
                             .build());
                 }
             });
@@ -77,5 +85,13 @@ public class SiteEventScheduler {
         }
 
         return builder.toString();
+    }
+
+    private String normalizeContent(String content) {
+        if (content.length() > MAX_CONTENT_LENGTH) {
+            return content.substring(0, MAX_CONTENT_LENGTH) + "...";
+        } else {
+            return content;
+        }
     }
 }

@@ -1,7 +1,7 @@
 package com.kotlarz.fly4freenotifier.domain.event;
 
 import com.kotlarz.fly4freenotifier.domain.notified.SiteType;
-import com.kotlarz.fly4freenotifier.domain.phrase.Phrase;
+import com.kotlarz.fly4freenotifier.domain.phrase.SiteByPhrase;
 import lombok.*;
 
 import javax.persistence.*;
@@ -24,8 +24,17 @@ public class SiteEvent {
     @Enumerated(EnumType.STRING)
     private SiteType siteType;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 4096)
     private String content;
+
+    @Column(nullable = false, length = 4096)
+    private String normalizedContent;
+
+    @Column(length = 4096)
+    private String link;
+
+    @Column(length = 4096)
+    private String innerTitle;
 
     @Column(nullable = false)
     private String hash;
@@ -33,10 +42,6 @@ public class SiteEvent {
     @Column(nullable = false)
     private Date date;
 
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinTable(
-            joinColumns = {@JoinColumn(name = "siteeventid")},
-            inverseJoinColumns = {@JoinColumn(name = "phraseid")}
-    )
-    private List<Phrase> phrases;
+    @OneToMany(mappedBy = "siteEvent", fetch = FetchType.EAGER, orphanRemoval = true, cascade = CascadeType.ALL)
+    private List<SiteByPhrase> siteByPhrases;
 }
