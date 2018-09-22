@@ -2,7 +2,10 @@
     <div>
         <v-container grid-list-xs text-xs-center>
             <v-layout row wrap>
-                <v-flex xs12 :key="index" v-for="(notifiedUser, index) in notifiedUsers">
+                <v-flex xs12
+                        :key="index"
+                        v-for="(notifiedUser, index) in notifiedUsers"
+                        class="notified-user-row">
                     <notified-user-card :notified-user="notifiedUser"
                                         :site-types="siteTypes"
                                         @delete="deleteUser(notifiedUser)"
@@ -115,3 +118,9 @@
         }
     }
 </script>
+
+<style scoped>
+    .notified-user-row {
+        padding: 10px !important;
+    }
+</style>

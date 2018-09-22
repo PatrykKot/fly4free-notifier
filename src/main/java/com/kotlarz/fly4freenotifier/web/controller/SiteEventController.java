@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -19,7 +18,7 @@ public class SiteEventController {
     @GetMapping
     public List<SiteEventDto> getAll() {
         return siteEventService.getAllDto().stream()
-                .sorted(Comparator.comparing(SiteEventDto::getDate))
+                .sorted((o1, o2) -> o2.getDate().compareTo(o1.getDate()))
                 .collect(Collectors.toList());
     }
 

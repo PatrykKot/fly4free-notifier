@@ -50,7 +50,12 @@
             },
 
             selectedSiteType() {
-                return this.siteTypes.find(item => item.text == this.siteTypeText).type
+                if (!!this.siteTypeText) {
+                    return this.siteTypes.find(item => item.text == this.siteTypeText).type
+                }
+                else {
+                    return null
+                }
             }
         },
 

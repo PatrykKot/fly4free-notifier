@@ -3,7 +3,8 @@
         <v-card-text>
             <v-data-table
                     :headers="headers"
-                    :items="events">
+                    :items="events"
+                    disable-initial-sort>
                 <template slot="items" slot-scope="props">
                     <td>
                         <v-tooltip bottom>
@@ -18,42 +19,7 @@
                         </v-tooltip>
                     </td>
                     <td>
-                        <template v-if="props.item.siteByPhrases.length > 0">
-                            <v-tooltip bottom>
-                            <span slot="activator"
-                                  class="event-by-phrase-count">
-                                {{ props.item.siteByPhrases.length }}
-                            </span>
-                                <v-list>
-                                    <template v-for="siteByPhrase in props.item.siteByPhrases">
-                                        <v-subheader>
-                                            Email: <b>{{siteByPhrase.email}}</b>
-                                        </v-subheader>
-                                        <v-subheader>
-                                            Fraza: <b>{{siteByPhrase.phraseText}}</b>
-                                        </v-subheader>
-                                        <v-subheader>
-                                            <span>Wysłano maila:</span>
-                                            <span v-if="siteByPhrase.emailSent"
-                                                  style="color: green">
-                                                <b>TAK</b>
-                                            </span>
-                                            <span v-else
-                                                  style="color: red">
-                                                <b>NIE</b>
-                                            </span>
-                                        </v-subheader>
-                                    </template>
-                                </v-list>
-                            </v-tooltip>
-                        </template>
-                        <template v-else>
-                            <span slot="activator"
-                                  class="event-by-phrase-count"
-                                  style="cursor: default">
-                                {{ props.item.siteByPhrases.length }}
-                            </span>
-                        </template>
+                        <site-by-phrases-element :site-by-phrases="props.item.siteByPhrases"/>
                     </td>
                     <td>{{ props.item.siteType.text }}</td>
                     <td>{{ formatDate(props.item.date) }}</td>
@@ -70,9 +36,11 @@
     import SiteEventService from '../service/SiteEventService'
     import {addAll, clearArray} from "../util/arrayUtils";
     import moment from 'moment'
+    import SiteByPhrasesElement from "../components/SiteByPhrasesElement";
 
     export default {
         name: "SiteEventsView",
+        components: {SiteByPhrasesElement},
         data: () => ({
             events: [],
 
@@ -119,10 +87,3 @@
         }
     }
 </script>
-
-<style scoped>
-    .event-by-phrase-count {
-        cursor: pointer;
-        font-size: 20px;
-    }
-</style>
