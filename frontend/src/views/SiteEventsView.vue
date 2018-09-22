@@ -7,16 +7,10 @@
                     disable-initial-sort>
                 <template slot="items" slot-scope="props">
                     <td>
-                        <v-tooltip bottom>
-                            <span slot="activator"
-                                  :style="{cursor: props.item.link ? 'pointer' : 'default'}"
-                                  @click="onEventClick(props.item)">
+                        <span :style="{cursor: props.item.link ? 'pointer' : 'default'}"
+                              @click="onEventClick(props.item)">
                             {{ props.item.normalizedContent }}
-                            </span>
-                            <span>
-                                {{props.item.innerTitle}}
-                            </span>
-                        </v-tooltip>
+                        </span>
                     </td>
                     <td>
                         <site-by-phrases-element :site-by-phrases="props.item.siteByPhrases"/>

@@ -7,8 +7,8 @@ import org.springframework.stereotype.Service;
 public class SiteTypeTranslationResolver {
     public String translate(SiteType type) {
         switch (type) {
-            case FLY4FREE_FACEBOOK:
-                return "FB Fly4Free";
+            case FLY4FREE:
+                return "Fly4Free";
             default:
                 return type.name();
         }

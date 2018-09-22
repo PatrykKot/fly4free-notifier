@@ -33,9 +33,6 @@ public class SiteEvent {
     @Column(length = 4096)
     private String link;
 
-    @Column(length = 4096)
-    private String innerTitle;
-
     @Column(nullable = false)
     private String hash;
 

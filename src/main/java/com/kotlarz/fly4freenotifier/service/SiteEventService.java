@@ -41,7 +41,6 @@ public class SiteEventService {
                 .id(event.getId())
                 .content(event.getContent())
                 .normalizedContent(event.getNormalizedContent())
-                .innerTitle(event.getInnerTitle())
                 .date(event.getDate().getTime())
                 .siteType(SiteTypeDto.builder()
                         .type(event.getSiteType())

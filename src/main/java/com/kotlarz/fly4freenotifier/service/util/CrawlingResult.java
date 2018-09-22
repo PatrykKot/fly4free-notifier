@@ -10,7 +10,5 @@ import lombok.Data;
 public class CrawlingResult {
     private String content;
 
-    private String innerTitle;
-
     private String link;
 }

@@ -36,14 +36,13 @@ public class SiteEventResolver {
 
         events.forEach(event -> {
             String content = event.getContent().toLowerCase();
-            String innerTitle = event.getInnerTitle().toLowerCase();
             SiteType siteType = event.getSiteType();
 
             if (groupedPhrases.containsKey(siteType)) {
                 List<Phrase> matchingPhrases = groupedPhrases.get(siteType).stream()
                         .filter(phrase -> {
                             String trimmedPhrase = phrase.getText().toLowerCase().trim();
-                            return content.contains(trimmedPhrase) || innerTitle.contains(trimmedPhrase);
+                            return content.contains(trimmedPhrase);
                         })
                         .collect(Collectors.toList());
                 log.info("{} phrases matching to event from site " + siteType, matchingPhrases.size());

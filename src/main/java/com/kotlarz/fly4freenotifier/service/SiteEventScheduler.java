@@ -57,10 +57,9 @@ public class SiteEventScheduler {
                     newEvents.add(SiteEvent.builder()
                             .hash(hash)
                             .date(new Date())
-                            .siteType(SiteType.FLY4FREE_FACEBOOK)
+                            .siteType(siteType)
                             .content(content)
                             .normalizedContent(normalizeContent(content))
-                            .innerTitle(result.getInnerTitle())
                             .link(result.getLink())
                             .build());
                 }

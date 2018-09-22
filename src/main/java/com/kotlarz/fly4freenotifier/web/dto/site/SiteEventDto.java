@@ -20,8 +20,6 @@ public class SiteEventDto {
 
     private String link;
 
-    private String innerTitle;
-
     private Long date;
 
     private List<SiteByPhraseDto> siteByPhrases;
