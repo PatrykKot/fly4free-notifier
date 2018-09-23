@@ -8,9 +8,18 @@
                     :loading="loading"
                     :pagination.sync="pagination"
                     no-data-text="Brak wyników"
-                    rows-per-page-text="Liczba wyników na stronę"
+                    rows-per-page-text="Liczba wyników na stronie"
                     :rows-per-page-items="[5,10,25,{text: 'Wszystkie', value: null}]"
                     disable-initial-sort>
+                <template slot="headerCell" slot-scope="props">
+                    <span v-if="!props.header.search">
+                        {{props.header.text}}
+                    </span>
+                    <v-text-field v-else
+                                  v-model="search"
+                                  :label="props.header.text"
+                                  prepend-icon="search"/>
+                </template>
                 <template slot="items" slot-scope="props">
                     <td>
                         <span :style="{cursor: props.item.link ? 'pointer' : 'default'}"
@@ -29,12 +38,6 @@
                         Wyniki {{ props.pageStart }} - {{ props.pageStop }} z {{ props.itemsLength }}
                     </span>
                 </template>
-                <template slot="footer">
-                    <td>
-                        <v-text-field v-model="search"
-                                      placeholder="Szukaj"/>
-                    </td>
-                </template>
             </v-data-table>
         </v-card-text>
         <v-card-actions>
@@ -46,9 +49,9 @@
 <script>
     import SiteEventService from '../service/SiteEventService'
     import {addAll, clearArray} from "../util/arrayUtils";
-    import moment from 'moment'
     import SiteByPhrasesElement from "../components/SiteByPhrasesElement";
     import VTextField from "vuetify/es5/components/VTextField";
+    import timeago from 'timeago.js';
 
     export default {
         name: "SiteEventsView",
@@ -59,7 +62,7 @@
             searchTimeout: null,
             events: [],
             headers: [
-                {text: 'Treść', value: 'normalizedContent'},
+                {text: 'Treść', value: 'normalizedContent', search: true, sortable: false},
                 {text: 'Pasujących fraz', value: 'siteByPhrases.length', sortable: false},
                 {text: 'Strona', value: 'siteType'},
                 {text: 'Data', value: 'date'}
@@ -102,7 +105,7 @@
             },
 
             formatDate(time) {
-                return moment(time).format('YYYY-MM-DD HH:mm:ss')
+                return timeago().format(new Date(time), 'pl')
             },
 
             onEventClick(event) {
