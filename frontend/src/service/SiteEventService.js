@@ -5,11 +5,11 @@ class SiteEventService {
         return axios.delete('api/site/events')
     }
 
-    getEvents(sortBy, descending, page, rowsPerPage) {
+    getEvents(sortBy, descending, page, rowsPerPage, search) {
         return axios
             .get('api/site/events', {
                 params: {
-                    sortBy, descending, page, rowsPerPage
+                    sortBy, descending, page, rowsPerPage, search
                 }
             })
             .then(result => result.data)

@@ -26,12 +26,13 @@ public class SiteEventService {
     private SiteEventRepository siteEventRepository;
 
     @Transactional
-    public List<SiteEventDto> getDtos(String sortBy, Boolean descending, Long page, Long rowsPerPage) {
+    public List<SiteEventDto> getDtos(String sortBy, Boolean descending, Long page, Long rowsPerPage, String search) {
         Sort.Direction direction = descending ? Sort.Direction.DESC : Sort.Direction.ASC;
         sortBy = sortBy == null ? "date" : sortBy;
+        rowsPerPage = rowsPerPage == null ? Integer.MAX_VALUE : rowsPerPage;
         PageRequest request = PageRequest.of(page.intValue() - 1, rowsPerPage.intValue(), direction, sortBy);
 
-        return siteEventRepository.findAll(request).stream()
+        return siteEventRepository.findByContentContainingIgnoreCase(search, request).stream()
                 .map(this::toDto)
                 .collect(Collectors.toList());
     }
@@ -72,7 +73,7 @@ public class SiteEventService {
     }
 
     @Transactional
-    public Long countAll() {
-        return siteEventRepository.count();
+    public Long countBySearch(String search) {
+        return siteEventRepository.countByContentContainingIgnoreCase(search);
     }
 }

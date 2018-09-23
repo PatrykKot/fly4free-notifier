@@ -7,6 +7,9 @@
                     :total-items="total"
                     :loading="loading"
                     :pagination.sync="pagination"
+                    no-data-text="Brak wyników"
+                    rows-per-page-text="Liczba wyników na stronę"
+                    :rows-per-page-items="[5,10,25,{text: 'Wszystkie', value: null}]"
                     disable-initial-sort>
                 <template slot="items" slot-scope="props">
                     <td>
@@ -21,6 +24,17 @@
                     <td>{{ props.item.siteType.text }}</td>
                     <td>{{ formatDate(props.item.date) }}</td>
                 </template>
+                <template slot="pageText" slot-scope="props">
+                    <span v-if="events.length > 0">
+                        Wyniki {{ props.pageStart }} - {{ props.pageStop }} z {{ props.itemsLength }}
+                    </span>
+                </template>
+                <template slot="footer">
+                    <td>
+                        <v-text-field v-model="search"
+                                      placeholder="Szukaj"/>
+                    </td>
+                </template>
             </v-data-table>
         </v-card-text>
         <v-card-actions>
@@ -34,22 +48,28 @@
     import {addAll, clearArray} from "../util/arrayUtils";
     import moment from 'moment'
     import SiteByPhrasesElement from "../components/SiteByPhrasesElement";
+    import VTextField from "vuetify/es5/components/VTextField";
 
     export default {
         name: "SiteEventsView",
-        components: {SiteByPhrasesElement},
+        components: {VTextField, SiteByPhrasesElement},
 
         data: () => ({
+            search: '',
+            searchTimeout: null,
             events: [],
             headers: [
-                {text: 'Treść', value: 'normalizedContent', sortable: false},
+                {text: 'Treść', value: 'normalizedContent'},
                 {text: 'Pasujących fraz', value: 'siteByPhrases.length', sortable: false},
-                {text: 'Strona', value: 'siteType', sortable: false},
+                {text: 'Strona', value: 'siteType'},
                 {text: 'Data', value: 'date'}
             ],
             total: 0,
             loading: true,
-            pagination: {}
+            pagination: {
+                sortBy: 'date',
+                descending: true
+            }
         }),
 
         watch: {
@@ -58,6 +78,12 @@
                     this.reload()
                 },
                 deep: true
+            },
+            search() {
+                let me = this
+
+                clearTimeout(me.searchTimeout)
+                me.searchTimeout = setTimeout(() => me.reload(), 500)
             }
         },
 
@@ -66,7 +92,7 @@
                 this.loading = true
                 const {sortBy, descending, page, rowsPerPage} = this.pagination
 
-                SiteEventService.getEvents(sortBy, descending, page, rowsPerPage)
+                SiteEventService.getEvents(sortBy, descending, page, rowsPerPage, this.search.trim())
                     .then(result => {
                         clearArray(this.events)
                         addAll(this.events, result.data)

@@ -19,9 +19,10 @@ public class SiteEventController {
     public CountedResponse<SiteEventDto> get(@RequestParam(name = "sortBy", required = false) String sortBy,
                                              @RequestParam(name = "descending", required = false, defaultValue = "false") Boolean descending,
                                              @RequestParam("page") Long page,
-                                             @RequestParam("rowsPerPage") Long rowsPerPage) {
-        List<SiteEventDto> data = siteEventService.getDtos(sortBy, descending, page, rowsPerPage);
-        Long count = siteEventService.countAll();
+                                             @RequestParam(value = "rowsPerPage", required = false) Long rowsPerPage,
+                                             @RequestParam(value = "search", required = false) String search) {
+        List<SiteEventDto> data = siteEventService.getDtos(sortBy, descending, page, rowsPerPage, search);
+        Long count = siteEventService.countBySearch(search);
         return new CountedResponse<>(data, count);
     }
 
