@@ -1,4 +1,4 @@
-package com.kotlarz.fly4freenotifier.service;
+package com.kotlarz.fly4freenotifier.service.events;
 
 import com.kotlarz.fly4freenotifier.domain.notified.NotifiedUser;
 import com.kotlarz.fly4freenotifier.domain.phrase.Phrase;

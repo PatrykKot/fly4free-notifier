@@ -1,7 +1,7 @@
 package com.kotlarz.fly4freenotifier.web.controller;
 
 import com.kotlarz.fly4freenotifier.domain.notified.SiteType;
-import com.kotlarz.fly4freenotifier.service.SiteTypeTranslationResolver;
+import com.kotlarz.fly4freenotifier.service.events.SiteTypeTranslationResolver;
 import com.kotlarz.fly4freenotifier.web.dto.site.SiteTypeDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;

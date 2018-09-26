@@ -9,7 +9,7 @@
                     :pagination.sync="pagination"
                     no-data-text="Brak wyników"
                     rows-per-page-text="Liczba wyników na stronie"
-                    :rows-per-page-items="[5,10,25,{text: 'Wszystkie', value: null}]"
+                    :rows-per-page-items="[5,10,25,{text: 'Wszystkie', value: -1}]"
                     disable-initial-sort>
                 <template slot="headerCell" slot-scope="props">
                     <span v-if="!props.header.search">
@@ -41,7 +41,27 @@
             </v-data-table>
         </v-card-text>
         <v-card-actions>
-            <v-btn @click="deleteAll">Usuń wszystkie</v-btn>
+            <v-dialog v-model="deleteAllDialog"
+                      width="500px">
+                <v-btn slot="activator"
+                       @click="deleteAllDialog = true">
+                    Usuń wszystkie
+                </v-btn>
+                <v-card>
+                    <v-card-text>
+                        Czy na pewno chcesz usunąć wszystkie znalezione oferty?
+                    </v-card-text>
+                    <v-card-actions>
+                        <v-spacer/>
+                        <v-btn color="primary"
+                               :loading="deleting"
+                               @click="deleteAll">
+                            Usuń
+                        </v-btn>
+                        <v-spacer/>
+                    </v-card-actions>
+                </v-card>
+            </v-dialog>
         </v-card-actions>
     </v-card>
 </template>
@@ -72,30 +92,30 @@
             pagination: {
                 sortBy: 'date',
                 descending: true
-            }
+            },
+            deleteAllDialog: false,
+            deleting: false,
+            loading: true
         }),
 
         watch: {
-            pagination: {
-                handler() {
-                    this.reload()
-                },
-                deep: true
+            pagination() {
+                this.reload()
             },
             search() {
                 let me = this
 
                 clearTimeout(me.searchTimeout)
-                me.searchTimeout = setTimeout(() => me.reload(), 500)
+                me.searchTimeout = setTimeout(() => me.reload(true), 500)
             }
         },
 
         methods: {
             reload() {
-                this.loading = true
                 const {sortBy, descending, page, rowsPerPage} = this.pagination
 
-                SiteEventService.getEvents(sortBy, descending, page, rowsPerPage, this.search.trim())
+                this.loading = true
+                return SiteEventService.getEvents(sortBy, descending, page, rowsPerPage, this.search.trim())
                     .then(result => {
                         clearArray(this.events)
                         addAll(this.events, result.data)
@@ -120,8 +140,12 @@
             },
 
             deleteAll() {
+                this.deleting = true
+
                 SiteEventService.deleteAll()
                     .then(() => this.reload())
+                    .then(() => this.deleteAllDialog = false)
+                    .then(() => this.deleting = false)
             }
         }
     }

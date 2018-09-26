@@ -1,6 +1,6 @@
 package com.kotlarz.fly4freenotifier.web.controller;
 
-import com.kotlarz.fly4freenotifier.service.NotifiedUserService;
+import com.kotlarz.fly4freenotifier.service.events.NotifiedUserService;
 import com.kotlarz.fly4freenotifier.web.dto.notified.NotifiedUserDto;
 import com.kotlarz.fly4freenotifier.web.dto.notified.PhraseDto;
 import org.springframework.beans.factory.annotation.Autowired;

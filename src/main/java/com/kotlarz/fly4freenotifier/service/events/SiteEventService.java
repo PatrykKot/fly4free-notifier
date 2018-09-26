@@ -1,4 +1,4 @@
-package com.kotlarz.fly4freenotifier.service;
+package com.kotlarz.fly4freenotifier.service.events;
 
 import com.kotlarz.fly4freenotifier.domain.event.SiteEvent;
 import com.kotlarz.fly4freenotifier.repository.SiteEventRepository;
@@ -27,21 +27,23 @@ public class SiteEventService {
 
     @Transactional
     public List<SiteEventDto> getDtos(String sortBy, Boolean descending, Long page, Long rowsPerPage, String search) {
-        Sort.Direction direction = descending ? Sort.Direction.DESC : Sort.Direction.ASC;
-        sortBy = sortBy == null ? "date" : sortBy;
-        rowsPerPage = rowsPerPage == null ? Integer.MAX_VALUE : rowsPerPage;
-        PageRequest request = PageRequest.of(page.intValue() - 1, rowsPerPage.intValue(), direction, sortBy);
-
+        PageRequest request = resolvePageRequest(sortBy, descending, page, rowsPerPage);
         return siteEventRepository.findByContentContainingIgnoreCase(search, request).stream()
                 .map(this::toDto)
                 .collect(Collectors.toList());
+    }
+
+    private PageRequest resolvePageRequest(String sortBy, Boolean descending, Long page, Long rowsPerPage) {
+        Sort.Direction direction = descending ? Sort.Direction.DESC : Sort.Direction.ASC;
+        sortBy = sortBy == null ? "date" : sortBy;
+        rowsPerPage = rowsPerPage == -1 ? Integer.MAX_VALUE : rowsPerPage;
+        return PageRequest.of(page.intValue() - 1, rowsPerPage.intValue(), direction, sortBy);
     }
 
     @Transactional
     public SiteEventDto toDto(SiteEvent event) {
         return SiteEventDto.builder()
                 .id(event.getId())
-                .content(event.getContent())
                 .normalizedContent(event.getNormalizedContent())
                 .date(event.getDate().getTime())
                 .siteType(SiteTypeDto.builder()

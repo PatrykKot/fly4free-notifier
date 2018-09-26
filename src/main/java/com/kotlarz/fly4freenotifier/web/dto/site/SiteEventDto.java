@@ -14,8 +14,6 @@ public class SiteEventDto {
 
     private SiteTypeDto siteType;
 
-    private String content;
-
     private String normalizedContent;
 
     private String link;

@@ -1,6 +1,6 @@
 package com.kotlarz.fly4freenotifier.web.controller;
 
-import com.kotlarz.fly4freenotifier.service.SiteEventService;
+import com.kotlarz.fly4freenotifier.service.events.SiteEventService;
 import com.kotlarz.fly4freenotifier.web.dto.CountedResponse;
 import com.kotlarz.fly4freenotifier.web.dto.site.SiteEventDto;
 import org.springframework.beans.factory.annotation.Autowired;

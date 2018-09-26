@@ -4,7 +4,7 @@ import com.kotlarz.fly4freenotifier.domain.event.SiteEvent;
 import com.kotlarz.fly4freenotifier.domain.notified.NotifiedUser;
 import com.kotlarz.fly4freenotifier.domain.phrase.Phrase;
 import com.kotlarz.fly4freenotifier.domain.phrase.SiteByPhrase;
-import com.kotlarz.fly4freenotifier.service.SiteTypeTranslationResolver;
+import com.kotlarz.fly4freenotifier.service.events.SiteTypeTranslationResolver;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;
 import org.jsoup.Jsoup;

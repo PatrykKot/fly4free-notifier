@@ -1,6 +1,6 @@
 buildscript {
     ext {
-        springBootVersion = '2.1.0.M3'
+        springBootVersion = '2.0.5.RELEASE'
     }
     repositories {
         mavenCentral()
@@ -35,16 +35,14 @@ dependencies {
     compile('org.springframework.boot:spring-boot-starter-security')
     compile('org.springframework.boot:spring-boot-starter-web')
     compile('org.springframework.boot:spring-boot-starter-mail')
-    runtime('com.h2database:h2')
-    compileOnly('org.projectlombok:lombok')
     testCompile('org.springframework.boot:spring-boot-starter-test')
     testCompile('org.springframework.security:spring-security-test')
 
-    // https://mvnrepository.com/artifact/org.jsoup/jsoup
+    runtime('com.h2database:h2')
+    compileOnly('org.projectlombok:lombok')
     compile group: 'org.jsoup', name: 'jsoup', version: '1.11.3'
-
-    // https://mvnrepository.com/artifact/commons-io/commons-io
     compile group: 'commons-io', name: 'commons-io', version: '2.6'
+    compile group: 'joda-time', name: 'joda-time', version: '2.10'
 }
 
 node {
