@@ -22,7 +22,7 @@ public class DatabaseBackupService {
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
-    @Scheduled(fixedRate = 1000 * 24 * 3600 * 12, initialDelay = 1000 * 24 * 3600 * 12)
+    @Scheduled( fixedRate = 1000 * 3600 * 12 )
     public void runBackup() {
         createBackup();
         cleanupBackups();
