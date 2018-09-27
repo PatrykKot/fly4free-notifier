@@ -46,7 +46,7 @@ public class EmailNotifier {
             siteByPhrase.setEmailSent(true);
         } catch (Exception ex) {
             log.error("Cannot send email to {}", email);
-            log.error(ex.getMessage());
+            log.error(ex.getMessage(), ex);
 
             siteByPhrase.setEmailSent(false);
         }
