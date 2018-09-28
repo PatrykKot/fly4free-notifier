@@ -9,7 +9,7 @@
                     :pagination.sync="pagination"
                     no-data-text="Brak wyników"
                     rows-per-page-text="Liczba wyników na stronie"
-                    :rows-per-page-items="[5,10,25,{text: 'Wszystkie', value: -1}]"
+                    :rows-per-page-items="[10,25,{text: 'Wszystkie', value: -1}]"
                     disable-initial-sort>
                 <template slot="headerCell" slot-scope="props">
                     <span v-if="!props.header.search">
