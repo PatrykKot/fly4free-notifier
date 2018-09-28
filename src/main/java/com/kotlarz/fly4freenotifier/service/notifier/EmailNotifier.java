@@ -1,5 +1,6 @@
 package com.kotlarz.fly4freenotifier.service.notifier;
 
+import com.kotlarz.fly4freenotifier.App;
 import com.kotlarz.fly4freenotifier.domain.event.SiteEvent;
 import com.kotlarz.fly4freenotifier.domain.notified.NotifiedUser;
 import com.kotlarz.fly4freenotifier.domain.phrase.Phrase;
@@ -25,7 +26,7 @@ import java.nio.charset.StandardCharsets;
 @Slf4j
 @Service
 public class EmailNotifier {
-    private static final String CONTENT_TEMPLATE_PATH = "mail/template.html";
+    private static final String CONTENT_TEMPLATE_PATH = "/mail/template.html";
 
     @Autowired
     private JavaMailSender javaMailSender;
@@ -46,7 +47,7 @@ public class EmailNotifier {
             siteByPhrase.setEmailSent(true);
         } catch (Exception ex) {
             log.error("Cannot send email to {}", email);
-            log.error(ex.getMessage());
+            log.error(ex.getMessage(), ex);
 
             siteByPhrase.setEmailSent(false);
         }
@@ -74,7 +75,7 @@ public class EmailNotifier {
     }
 
     private String readTemplate() throws IOException {
-        InputStream templateStream = ClassLoader.getSystemResourceAsStream(CONTENT_TEMPLATE_PATH);
+        InputStream templateStream = App.class.getResourceAsStream(CONTENT_TEMPLATE_PATH);
         return IOUtils.toString(templateStream, StandardCharsets.UTF_8);
     }
 
