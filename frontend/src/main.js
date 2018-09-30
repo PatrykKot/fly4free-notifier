@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import App from './App.vue'
+import MobileApp from './MobileApp'
 import Vuetify from 'vuetify'
 
 import 'vuetify/dist/vuetify.min.css'
@@ -12,5 +12,5 @@ Vue.config.productionTip = false
 initPolishTimeago()
 
 new Vue({
-    render: h => h(App)
+    render: h => h(MobileApp)
 }).$mount('#app')
