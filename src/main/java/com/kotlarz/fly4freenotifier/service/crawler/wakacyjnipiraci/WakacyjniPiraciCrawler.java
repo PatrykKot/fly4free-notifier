@@ -25,10 +25,14 @@ public class WakacyjniPiraciCrawler implements SiteCrawler {
                 .stream()
                 .map(element -> {
                     Element aElement = element.getElementsByTag("a").get(0);
-                    aElement.getElementsByTag("span").get(0).text("");
+                    aElement.getElementsByTag("span").forEach(spanTag -> spanTag.text(""));
 
                     String content = aElement.text();
                     String link = aElement.attr("href");
+                    if (!link.startsWith("https:")) {
+                        link = "https:" + link;
+                    }
+
                     return CrawlingResult.builder()
                             .content(content)
                             .link(link)
