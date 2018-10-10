@@ -11,7 +11,7 @@
 		</encoder>
 		<file>logs/${LOG_FILE}</file>
 		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-			<fileNamePattern>${LOG_FILE}.%d{yyyy-MM-dd}.zip</fileNamePattern>
+			<fileNamePattern>logs/${LOG_FILE}.%d{yyyy-MM-dd}.zip</fileNamePattern>
 			<maxHistory>30</maxHistory>
 		</rollingPolicy>
 	</appender>
